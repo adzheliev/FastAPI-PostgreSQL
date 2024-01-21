@@ -24,6 +24,13 @@ async def get_menu(target_menu_id: Optional[UUID | str] = None, db: Session = De
     if target_menu_id is not None:
         menu = db.query(Menu).filter_by(id=target_menu_id).first()
         if menu:
+            menu.submenus_count = len(menu.submenus)
+            if menu.submenus_count > 0:
+                total = 0
+                for item in menu.submenus:
+                    submenu_dishes_count = len(item.dishes)
+                    total += submenu_dishes_count
+                menu.dishes_count = total
             return menu
         raise HTTPException(status_code=404, detail="menu not found")
     return None
@@ -31,7 +38,7 @@ async def get_menu(target_menu_id: Optional[UUID | str] = None, db: Session = De
 
 @router.post("/api/v1/menus", status_code=201)
 async def create_menu(menu: MenuCreate, db: Session = Depends(get_db)):
-    menu = Menu(title=menu.title, description=menu.description)
+    menu = Menu(title=menu.title, description=menu.description, submenus_count=0, dishes_count=0)
     db.add(menu)
     db.commit()
     db.refresh(menu)

@@ -52,7 +52,7 @@ async def get_dish(target_menu_id: Optional[UUID | str] = None, target_submenu_i
             break
 
     if not existing_dish:
-        raise HTTPException(status_code=404, detail="Dish not found")
+        raise HTTPException(status_code=404, detail="dish not found")
 
     return existing_dish
 
@@ -73,19 +73,19 @@ async def update_dish(dish: DishUpdate, target_menu_id: Optional[UUID | str] = N
         raise HTTPException(status_code=404, detail="submenu not found")
 
     existing_dish = None
-    for dish in existing_submenu.dishes:
-        if dish.id == target_dish_id:
-            existing_dish = dish
+    for item in existing_submenu.dishes:
+        if item.id == target_dish_id:
+            existing_dish = item
             break
 
     if not existing_dish:
-        raise HTTPException(status_code=404, detail="Dish not found")
+        raise HTTPException(status_code=404, detail="dish not found")
 
     existing_dish.title = dish.title
-    existing_dish.id = dish.id
+    existing_dish.id = target_dish_id
     existing_dish.description = dish.description
     existing_dish.submenu_id = target_submenu_id
-    existing_dish.price = dish.id
+    existing_dish.price = dish.price
     db.commit()
     db.refresh(existing_dish)
     return existing_dish
@@ -135,7 +135,7 @@ async def delete_dish(target_menu_id: Optional[UUID | str] = None, target_submen
             break
 
     if not existing_dish:
-        raise HTTPException(status_code=404, detail="Dish not found")
+        raise HTTPException(status_code=404, detail="dish not found")
 
     db.delete(existing_dish)
     db.commit()

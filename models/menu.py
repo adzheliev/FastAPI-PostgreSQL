@@ -1,5 +1,5 @@
 import uuid
-from sqlalchemy import Column, String
+from sqlalchemy import Column, String, Integer
 from sqlalchemy.orm import relationship
 from utils.database import Base
 
@@ -11,3 +11,5 @@ class Menu(Base):
     title = Column(String, unique=True)
     description = Column(String)
     submenus = relationship('Submenu', back_populates='menu', cascade='all, delete')
+    submenus_count = Column(Integer)
+    dishes_count = Column(Integer)
