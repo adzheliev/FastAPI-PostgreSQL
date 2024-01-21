@@ -22,7 +22,7 @@ async def get_dishes_list(target_menu_id: Optional[UUID | str] = None, target_su
 
     existing_submenu = None
     for item in existing_menu.submenus:
-        if item.id == target_submenu_id:
+        if str(item.id) == target_submenu_id:
             existing_submenu = item
             break
 
@@ -41,7 +41,7 @@ async def get_dish(target_menu_id: Optional[UUID | str] = None, target_submenu_i
 
     existing_submenu = None
     for submenu in existing_menu.submenus:
-        if submenu.id == target_submenu_id:
+        if str(submenu.id) == target_submenu_id:
             existing_submenu = submenu
             break
 
@@ -50,7 +50,7 @@ async def get_dish(target_menu_id: Optional[UUID | str] = None, target_submenu_i
 
     existing_dish = None
     for dish in existing_submenu.dishes:
-        if dish.id == target_dish_id:
+        if str(dish.id) == target_dish_id:
             existing_dish = dish
             break
 
@@ -68,7 +68,7 @@ async def update_dish(dish: DishUpdate, target_menu_id: Optional[UUID | str] = N
 
     existing_submenu = None
     for submenu in existing_menu.submenus:
-        if submenu.id == target_submenu_id:
+        if str(submenu.id) == target_submenu_id:
             existing_submenu = submenu
             break
 
@@ -77,7 +77,7 @@ async def update_dish(dish: DishUpdate, target_menu_id: Optional[UUID | str] = N
 
     existing_dish = None
     for item in existing_submenu.dishes:
-        if item.id == target_dish_id:
+        if str(item.id) == target_dish_id:
             existing_dish = item
             break
 
@@ -102,15 +102,12 @@ async def create_dish(dish: DishCreate, target_menu_id: Optional[UUID | str] = N
 
     existing_submenu = None
     for submenu in existing_menu.submenus:
-        if submenu.id == target_submenu_id:
+        if str(submenu.id) == target_submenu_id:
             existing_submenu = submenu
             break
 
     if not existing_submenu:
         raise HTTPException(status_code=404, detail="submenu not found")
-
-
-
 
     dish = Dish(title=dish.title, price=dish.price, submenu_id=target_submenu_id, description=dish.description)
     db.add(dish)
@@ -127,7 +124,7 @@ async def delete_dish(target_menu_id: Optional[UUID | str] = None, target_submen
 
     existing_submenu = None
     for submenu in existing_menu.submenus:
-        if submenu.id == target_submenu_id:
+        if str(submenu.id) == target_submenu_id:
             existing_submenu = submenu
             break
 
@@ -136,7 +133,7 @@ async def delete_dish(target_menu_id: Optional[UUID | str] = None, target_submen
 
     existing_dish = None
     for dish in existing_submenu.dishes:
-        if dish.id == target_dish_id:
+        if str(dish.id) == target_dish_id:
             existing_dish = dish
             break
 

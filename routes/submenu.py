@@ -40,7 +40,7 @@ async def get_submenu(target_menu_id: Optional[UUID | str] = None, target_submen
 
     existing_submenu = None
     for submenu in existing_menu.submenus:
-        if submenu.id == target_submenu_id:
+        if str(submenu.id) == target_submenu_id:
             existing_submenu = submenu
             break
 
@@ -59,7 +59,7 @@ async def update_submenu(submenu: SubmenuUpdate, target_menu_id: Optional[UUID |
 
     existing_submenu = None
     for item in existing_menu.submenus:
-        if item.id == target_submenu_id:
+        if str(item.id) == target_submenu_id:
             existing_submenu = item
             break
 
@@ -81,7 +81,7 @@ async def delete_submenu(target_menu_id: Optional[UUID | str] = None, target_sub
 
     existing_submenu = None
     for submenu in existing_menu.submenus:
-        if submenu.id == target_submenu_id:
+        if str(submenu.id) == target_submenu_id:
             existing_submenu = submenu
             break
 
