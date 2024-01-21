@@ -17,10 +17,13 @@ async def get_dishes_list(target_menu_id: Optional[UUID | str] = None, target_su
     if not existing_menu:
         raise HTTPException(status_code=404, detail="menu not found")
 
+    if not existing_menu.submenus:
+        return []
+
     existing_submenu = None
-    for submenu in existing_menu.submenus:
-        if submenu.id == target_submenu_id:
-            existing_submenu = submenu
+    for item in existing_menu.submenus:
+        if item.id == target_submenu_id:
+            existing_submenu = item
             break
 
     if not existing_submenu:

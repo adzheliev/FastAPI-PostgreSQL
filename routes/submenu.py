@@ -46,6 +46,7 @@ async def get_submenu(target_menu_id: Optional[UUID | str] = None, target_submen
 
     if not existing_submenu:
         raise HTTPException(status_code=404, detail="submenu not found")
+    existing_submenu.dishes_count = len(existing_submenu.dishes)
 
     return existing_submenu
 
