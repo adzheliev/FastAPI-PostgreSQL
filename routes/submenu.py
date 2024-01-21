@@ -12,7 +12,10 @@ router = APIRouter()
 
 
 @router.get("/api/v1/menus/{target_menu_id}/submenus")
-async def get_submenus_list(target_menu_id: Optional[UUID | str] = None, db: Session = Depends(get_db)):
+async def get_submenus_list(
+        target_menu_id: Optional[UUID | str] = None,
+        db: Session = Depends(get_db)):
+
     existing_menu = db.query(Menu).filter_by(id=target_menu_id).first()
     if not existing_menu:
         raise HTTPException(status_code=404, detail="menu not found")
@@ -21,11 +24,19 @@ async def get_submenus_list(target_menu_id: Optional[UUID | str] = None, db: Ses
 
 
 @router.post("/api/v1/menus/{target_menu_id}/submenus", status_code=201)
-async def create_submenu(submenu: SubmenuCreate, target_menu_id: Optional[UUID | str] = None, db: Session = Depends(get_db)):
+async def create_submenu(
+        submenu: SubmenuCreate,
+        target_menu_id: Optional[UUID | str] = None,
+        db: Session = Depends(get_db)):
+
     existing_menu = db.query(Menu).filter_by(id=target_menu_id).first()
     if not existing_menu:
         raise HTTPException(status_code=404, detail="menu not found")
-    submenu = Submenu(title=submenu.title, description=submenu.description, menu_id=target_menu_id)
+    submenu = Submenu(
+        title=submenu.title,
+        description=submenu.description,
+        menu_id=target_menu_id
+    )
     db.add(submenu)
     db.commit()
     db.refresh(submenu)
@@ -33,7 +44,11 @@ async def create_submenu(submenu: SubmenuCreate, target_menu_id: Optional[UUID |
 
 
 @router.get("/api/v1/menus/{target_menu_id}/submenus/{target_submenu_id}")
-async def get_submenu(target_menu_id: Optional[UUID | str] = None, target_submenu_id: Optional[UUID | str] = None, db: Session = Depends(get_db)):
+async def get_submenu(
+        target_menu_id: Optional[UUID | str] = None,
+        target_submenu_id: Optional[UUID | str] = None,
+        db: Session = Depends(get_db)):
+
     existing_menu = db.query(Menu).filter_by(id=target_menu_id).first()
     if not existing_menu:
         raise HTTPException(status_code=404, detail="menu not found")
@@ -52,7 +67,12 @@ async def get_submenu(target_menu_id: Optional[UUID | str] = None, target_submen
 
 
 @router.patch("/api/v1/menus/{target_menu_id}/submenus/{target_submenu_id}")
-async def update_submenu(submenu: SubmenuUpdate, target_menu_id: Optional[UUID | str] = None, target_submenu_id: Optional[UUID | str] = None, db: Session = Depends(get_db)):
+async def update_submenu(
+        submenu: SubmenuUpdate,
+        target_menu_id: Optional[UUID | str] = None,
+        target_submenu_id: Optional[UUID | str] = None,
+        db: Session = Depends(get_db)):
+
     existing_menu = db.query(Menu).filter_by(id=target_menu_id).first()
     if not existing_menu:
         raise HTTPException(status_code=404, detail="menu not found")
@@ -74,7 +94,11 @@ async def update_submenu(submenu: SubmenuUpdate, target_menu_id: Optional[UUID |
 
 
 @router.delete("/api/v1/menus/{target_menu_id}/submenus/{target_submenu_id}")
-async def delete_submenu(target_menu_id: Optional[UUID | str] = None, target_submenu_id: Optional[UUID | str] = None, db: Session = Depends(get_db)):
+async def delete_submenu(
+        target_menu_id: Optional[UUID | str] = None,
+        target_submenu_id: Optional[UUID | str] = None,
+        db: Session = Depends(get_db)):
+
     existing_menu = db.query(Menu).filter_by(id=target_menu_id).first()
     if not existing_menu:
         raise HTTPException(status_code=404, detail="menu not found")

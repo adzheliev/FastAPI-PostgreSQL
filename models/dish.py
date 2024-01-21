@@ -8,7 +8,12 @@ from utils.database import Base
 class Dish(Base):
     __tablename__ = 'dishes'
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
+    id = Column(
+        UUID(as_uuid=True),
+        primary_key=True,
+        default=uuid.uuid4,
+        index=True
+    )
     title = Column(String, unique=True)
     description = Column(String)
     price = Column(String)

@@ -20,7 +20,10 @@ async def get_menus_list(db: Session = Depends(get_db)):
 
 
 @router.get("/api/v1/menus/{target_menu_id}")
-async def get_menu(target_menu_id: Optional[UUID | str] = None, db: Session = Depends(get_db)):
+async def get_menu(
+        target_menu_id: Optional[UUID | str] = None,
+        db: Session = Depends(get_db)):
+
     if target_menu_id is not None:
         menu = db.query(Menu).filter_by(id=target_menu_id).first()
         if menu:
@@ -37,8 +40,16 @@ async def get_menu(target_menu_id: Optional[UUID | str] = None, db: Session = De
 
 
 @router.post("/api/v1/menus", status_code=201)
-async def create_menu(menu: MenuCreate, db: Session = Depends(get_db)):
-    menu = Menu(title=menu.title, description=menu.description, submenus_count=0, dishes_count=0)
+async def create_menu(
+        menu: MenuCreate,
+        db: Session = Depends(get_db)):
+
+    menu = Menu(
+        title=menu.title,
+        description=menu.description,
+        submenus_count=0,
+        dishes_count=0
+    )
     db.add(menu)
     db.commit()
     db.refresh(menu)
@@ -46,7 +57,11 @@ async def create_menu(menu: MenuCreate, db: Session = Depends(get_db)):
 
 
 @router.patch("/api/v1/menus/{target_menu_id}")
-async def update_menu(menu: MenuUpdate, target_menu_id: Optional[UUID | str] = None, db: Session = Depends(get_db)):
+async def update_menu(
+        menu: MenuUpdate,
+        target_menu_id: Optional[UUID | str] = None,
+        db: Session = Depends(get_db)):
+
     existing_menu = db.query(Menu).filter_by(id=target_menu_id).first()
     if not existing_menu:
         raise HTTPException(status_code=404, detail="menu not found")
@@ -60,7 +75,10 @@ async def update_menu(menu: MenuUpdate, target_menu_id: Optional[UUID | str] = N
 
 
 @router.delete("/api/v1/menus/{target_menu_id}")
-async def delete_menu(target_menu_id: Optional[UUID | str] = None, db: Session = Depends(get_db)):
+async def delete_menu(
+        target_menu_id: Optional[UUID | str] = None,
+        db: Session = Depends(get_db)):
+
     existing_menu = db.query(Menu).filter_by(id=target_menu_id).first()
     if not existing_menu:
         raise HTTPException(status_code=404, detail="menu not found")

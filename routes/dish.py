@@ -12,7 +12,11 @@ router = APIRouter()
 
 
 @router.get("/api/v1/menus/{target_menu_id}/submenus/{target_submenu_id}/dishes")
-async def get_dishes_list(target_menu_id: Optional[UUID | str] = None, target_submenu_id: Optional[UUID | str] = None, db: Session = Depends(get_db)):
+async def get_dishes_list(
+        target_menu_id: Optional[UUID | str] = None,
+        target_submenu_id: Optional[UUID | str] = None,
+        db: Session = Depends(get_db)):
+
     existing_menu = db.query(Menu).filter_by(id=target_menu_id).first()
     if not existing_menu:
         raise HTTPException(status_code=404, detail="menu not found")
@@ -34,7 +38,12 @@ async def get_dishes_list(target_menu_id: Optional[UUID | str] = None, target_su
 
 
 @router.get("/api/v1/menus/{target_menu_id}/submenus/{target_submenu_id}/dishes/{target_dish_id}")
-async def get_dish(target_menu_id: Optional[UUID | str] = None, target_submenu_id: Optional[UUID | str] = None, target_dish_id: Optional[UUID | str] = None, db: Session = Depends(get_db)):
+async def get_dish(
+        target_menu_id: Optional[UUID | str] = None,
+        target_submenu_id: Optional[UUID | str] = None,
+        target_dish_id: Optional[UUID | str] = None,
+        db: Session = Depends(get_db)):
+
     existing_menu = db.query(Menu).filter_by(id=target_menu_id).first()
     if not existing_menu:
         raise HTTPException(status_code=404, detail="menu not found")
@@ -61,7 +70,13 @@ async def get_dish(target_menu_id: Optional[UUID | str] = None, target_submenu_i
 
 
 @router.patch("/api/v1/menus/{target_menu_id}/submenus/{target_submenu_id}/dishes/{target_dish_id}")
-async def update_dish(dish: DishUpdate, target_menu_id: Optional[UUID | str] = None, target_submenu_id: Optional[UUID | str] = None, target_dish_id: Optional[UUID | str] = None, db: Session = Depends(get_db)):
+async def update_dish(
+        dish: DishUpdate,
+        target_menu_id: Optional[UUID | str] = None,
+        target_submenu_id: Optional[UUID | str] = None,
+        target_dish_id: Optional[UUID | str] = None,
+        db: Session = Depends(get_db)):
+
     existing_menu = db.query(Menu).filter_by(id=target_menu_id).first()
     if not existing_menu:
         raise HTTPException(status_code=404, detail="menu not found")
@@ -95,7 +110,12 @@ async def update_dish(dish: DishUpdate, target_menu_id: Optional[UUID | str] = N
 
 
 @router.post("/api/v1/menus/{target_menu_id}/submenus/{target_submenu_id}/dishes", status_code=201)
-async def create_dish(dish: DishCreate, target_menu_id: Optional[UUID | str] = None, target_submenu_id: Optional[UUID | str] = None, db: Session = Depends(get_db)):
+async def create_dish(
+        dish: DishCreate,
+        target_menu_id: Optional[UUID | str] = None,
+        target_submenu_id: Optional[UUID | str] = None,
+        db: Session = Depends(get_db)):
+
     existing_menu = db.query(Menu).filter_by(id=target_menu_id).first()
     if not existing_menu:
         raise HTTPException(status_code=404, detail="menu not found")
@@ -109,7 +129,12 @@ async def create_dish(dish: DishCreate, target_menu_id: Optional[UUID | str] = N
     if not existing_submenu:
         raise HTTPException(status_code=404, detail="submenu not found")
 
-    dish = Dish(title=dish.title, price=dish.price, submenu_id=target_submenu_id, description=dish.description)
+    dish = Dish(
+        title=dish.title,
+        price=dish.price,
+        submenu_id=target_submenu_id,
+        description=dish.description
+    )
     db.add(dish)
     db.commit()
     db.refresh(dish)
@@ -117,7 +142,12 @@ async def create_dish(dish: DishCreate, target_menu_id: Optional[UUID | str] = N
 
 
 @router.delete("/api/v1/menus/{target_menu_id}/submenus/{target_submenu_id}/dishes/{target_dish_id}")
-async def delete_dish(target_menu_id: Optional[UUID | str] = None, target_submenu_id: Optional[UUID | str] = None, target_dish_id: Optional[UUID | str] = None, db: Session = Depends(get_db)):
+async def delete_dish(
+        target_menu_id: Optional[UUID | str] = None,
+        target_submenu_id: Optional[UUID | str] = None,
+        target_dish_id: Optional[UUID | str] = None,
+        db: Session = Depends(get_db)):
+
     existing_menu = db.query(Menu).filter_by(id=target_menu_id).first()
     if not existing_menu:
         raise HTTPException(status_code=404, detail="menu not found")
