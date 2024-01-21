@@ -1,3 +1,5 @@
+"""Routes for Dish CRUD requests"""
+
 from fastapi import APIRouter
 from typing import Optional
 from fastapi import Depends, HTTPException
@@ -16,6 +18,7 @@ async def get_dishes_list(
         target_menu_id: Optional[UUID | str] = None,
         target_submenu_id: Optional[UUID | str] = None,
         db: Session = Depends(get_db)):
+    """Function gets a list of dishes in a specific menu and submenu"""
 
     existing_menu = db.query(Menu).filter_by(id=target_menu_id).first()
     if not existing_menu:
@@ -43,6 +46,7 @@ async def get_dish(
         target_submenu_id: Optional[UUID | str] = None,
         target_dish_id: Optional[UUID | str] = None,
         db: Session = Depends(get_db)):
+    """Function gets a specific dish in a specific menu and submenu"""
 
     existing_menu = db.query(Menu).filter_by(id=target_menu_id).first()
     if not existing_menu:
@@ -76,6 +80,7 @@ async def update_dish(
         target_submenu_id: Optional[UUID | str] = None,
         target_dish_id: Optional[UUID | str] = None,
         db: Session = Depends(get_db)):
+    """Function updates a specific dish in a specific menu and submenu"""
 
     existing_menu = db.query(Menu).filter_by(id=target_menu_id).first()
     if not existing_menu:
@@ -115,6 +120,7 @@ async def create_dish(
         target_menu_id: Optional[UUID | str] = None,
         target_submenu_id: Optional[UUID | str] = None,
         db: Session = Depends(get_db)):
+    """Function creates a new dish in a specific menu and submenu"""
 
     existing_menu = db.query(Menu).filter_by(id=target_menu_id).first()
     if not existing_menu:
@@ -147,6 +153,7 @@ async def delete_dish(
         target_submenu_id: Optional[UUID | str] = None,
         target_dish_id: Optional[UUID | str] = None,
         db: Session = Depends(get_db)):
+    """Function deletes a specific dish from a specific menu and submenu"""
 
     existing_menu = db.query(Menu).filter_by(id=target_menu_id).first()
     if not existing_menu:

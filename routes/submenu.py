@@ -1,3 +1,5 @@
+"""Routes for Submenu CRUD requests"""
+
 from fastapi import APIRouter
 from typing import Optional
 from fastapi import Depends, HTTPException
@@ -15,6 +17,7 @@ router = APIRouter()
 async def get_submenus_list(
         target_menu_id: Optional[UUID | str] = None,
         db: Session = Depends(get_db)):
+    """Function gets a list of submenus in a specific menu"""
 
     existing_menu = db.query(Menu).filter_by(id=target_menu_id).first()
     if not existing_menu:
@@ -23,31 +26,12 @@ async def get_submenus_list(
     return submenus
 
 
-@router.post("/api/v1/menus/{target_menu_id}/submenus", status_code=201)
-async def create_submenu(
-        submenu: SubmenuCreate,
-        target_menu_id: Optional[UUID | str] = None,
-        db: Session = Depends(get_db)):
-
-    existing_menu = db.query(Menu).filter_by(id=target_menu_id).first()
-    if not existing_menu:
-        raise HTTPException(status_code=404, detail="menu not found")
-    submenu = Submenu(
-        title=submenu.title,
-        description=submenu.description,
-        menu_id=target_menu_id
-    )
-    db.add(submenu)
-    db.commit()
-    db.refresh(submenu)
-    return submenu
-
-
 @router.get("/api/v1/menus/{target_menu_id}/submenus/{target_submenu_id}")
 async def get_submenu(
         target_menu_id: Optional[UUID | str] = None,
         target_submenu_id: Optional[UUID | str] = None,
         db: Session = Depends(get_db)):
+    """Function gets a specific submenu in a specific menu"""
 
     existing_menu = db.query(Menu).filter_by(id=target_menu_id).first()
     if not existing_menu:
@@ -66,12 +50,34 @@ async def get_submenu(
     return existing_submenu
 
 
+@router.post("/api/v1/menus/{target_menu_id}/submenus", status_code=201)
+async def create_submenu(
+        submenu: SubmenuCreate,
+        target_menu_id: Optional[UUID | str] = None,
+        db: Session = Depends(get_db)):
+    """Function creates submenu in a specific menu"""
+
+    existing_menu = db.query(Menu).filter_by(id=target_menu_id).first()
+    if not existing_menu:
+        raise HTTPException(status_code=404, detail="menu not found")
+    submenu = Submenu(
+        title=submenu.title,
+        description=submenu.description,
+        menu_id=target_menu_id
+    )
+    db.add(submenu)
+    db.commit()
+    db.refresh(submenu)
+    return submenu
+
+
 @router.patch("/api/v1/menus/{target_menu_id}/submenus/{target_submenu_id}")
 async def update_submenu(
         submenu: SubmenuUpdate,
         target_menu_id: Optional[UUID | str] = None,
         target_submenu_id: Optional[UUID | str] = None,
         db: Session = Depends(get_db)):
+    """Function updates a specific submenu in a specific menu"""
 
     existing_menu = db.query(Menu).filter_by(id=target_menu_id).first()
     if not existing_menu:
@@ -98,6 +104,7 @@ async def delete_submenu(
         target_menu_id: Optional[UUID | str] = None,
         target_submenu_id: Optional[UUID | str] = None,
         db: Session = Depends(get_db)):
+    """Function deletes a specific submenu in a specific menu"""
 
     existing_menu = db.query(Menu).filter_by(id=target_menu_id).first()
     if not existing_menu:

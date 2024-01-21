@@ -1,3 +1,5 @@
+"""Receiving data to access the database from env variables"""
+
 from dotenv import load_dotenv
 import os
 

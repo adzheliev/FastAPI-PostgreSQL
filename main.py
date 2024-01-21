@@ -1,3 +1,5 @@
+"""Main application module use to run the app"""
+
 from fastapi import FastAPI
 from utils.database import engine, Base
 from routes import menu, submenu, dish

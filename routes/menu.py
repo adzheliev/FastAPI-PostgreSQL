@@ -1,3 +1,5 @@
+"""Routes for Menu CRUD requests"""
+
 from fastapi import APIRouter
 from typing import Optional
 from fastapi import Depends, HTTPException
@@ -13,6 +15,8 @@ router = APIRouter()
 
 @router.get("/api/v1/menus")
 async def get_menus_list(db: Session = Depends(get_db)):
+    """Function gets a list of menus"""
+
     menus = db.query(Menu).all()
     if menus:
         return menus
@@ -23,6 +27,7 @@ async def get_menus_list(db: Session = Depends(get_db)):
 async def get_menu(
         target_menu_id: Optional[UUID | str] = None,
         db: Session = Depends(get_db)):
+    """Function gets a specific menu"""
 
     if target_menu_id is not None:
         menu = db.query(Menu).filter_by(id=target_menu_id).first()
@@ -43,6 +48,7 @@ async def get_menu(
 async def create_menu(
         menu: MenuCreate,
         db: Session = Depends(get_db)):
+    """Function creates a new menu"""
 
     menu = Menu(
         title=menu.title,
@@ -61,6 +67,7 @@ async def update_menu(
         menu: MenuUpdate,
         target_menu_id: Optional[UUID | str] = None,
         db: Session = Depends(get_db)):
+    """Function updates a specific menu"""
 
     existing_menu = db.query(Menu).filter_by(id=target_menu_id).first()
     if not existing_menu:
@@ -78,6 +85,7 @@ async def update_menu(
 async def delete_menu(
         target_menu_id: Optional[UUID | str] = None,
         db: Session = Depends(get_db)):
+    """Function deletes a specific menu"""
 
     existing_menu = db.query(Menu).filter_by(id=target_menu_id).first()
     if not existing_menu:

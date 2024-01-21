@@ -1,3 +1,5 @@
+"""Model for Dish entity"""
+
 import uuid
 from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
@@ -6,6 +8,7 @@ from utils.database import Base
 
 
 class Dish(Base):
+    """Class for Dish entity with relative fields"""
     __tablename__ = 'dishes'
 
     id = Column(

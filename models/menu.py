@@ -1,3 +1,5 @@
+"""Model for Menu entity"""
+
 import uuid
 from sqlalchemy import Column, String, Integer
 from sqlalchemy.dialects.postgresql import UUID
@@ -6,6 +8,7 @@ from utils.database import Base
 
 
 class Menu(Base):
+    """Class for Menu entity with relative fields"""
     __tablename__ = 'menus'
 
     id = Column(

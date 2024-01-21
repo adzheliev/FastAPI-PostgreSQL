@@ -1,3 +1,5 @@
+"""Model for Submenu entity"""
+
 import uuid
 from sqlalchemy import Column, String, ForeignKey, Integer
 from sqlalchemy.dialects.postgresql import UUID
@@ -6,6 +8,7 @@ from utils.database import Base
 
 
 class Submenu(Base):
+    """Class for Submenu entity with relative fields"""
     __tablename__ = 'submenus'
 
     id = Column(
