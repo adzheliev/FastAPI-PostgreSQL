@@ -108,7 +108,7 @@ async def update_dish(
     existing_dish.id = target_dish_id
     existing_dish.description = dish.description
     existing_dish.submenu_id = target_submenu_id
-    existing_dish.price = dish.price
+    existing_dish.price = "{:.2f}".format(float(dish.price))
     db.commit()
     db.refresh(existing_dish)
     return existing_dish
@@ -137,10 +137,11 @@ async def create_dish(
 
     dish = Dish(
         title=dish.title,
-        price=dish.price,
+        price="{:.2f}".format(float(dish.price)),
         submenu_id=target_submenu_id,
         description=dish.description
     )
+
     db.add(dish)
     db.commit()
     db.refresh(dish)
