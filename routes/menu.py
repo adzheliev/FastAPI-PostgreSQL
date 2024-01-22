@@ -9,11 +9,14 @@ from schemas.menu import MenuCreate, MenuUpdate
 from sqlalchemy.orm import Session
 from uuid import UUID
 
-
 router = APIRouter()
 
 
-@router.get("/api/v1/menus")
+@router.get(
+    "/api/v1/menus",
+    status_code=200,
+    summary="Gets a list of menus"
+)
 async def get_menus_list(db: Session = Depends(get_db)):
     """Function gets a list of menus"""
 
@@ -23,7 +26,11 @@ async def get_menus_list(db: Session = Depends(get_db)):
     return []
 
 
-@router.get("/api/v1/menus/{target_menu_id}")
+@router.get(
+    "/api/v1/menus/{target_menu_id}",
+    status_code=200,
+    summary="Get specific menu"
+)
 async def get_menu(
         target_menu_id: Optional[UUID | str] = None,
         db: Session = Depends(get_db)):
@@ -44,7 +51,11 @@ async def get_menu(
     return None
 
 
-@router.post("/api/v1/menus", status_code=201)
+@router.post(
+    "/api/v1/menus",
+    status_code=201,
+    summary="Creates a new menu"
+)
 async def create_menu(
         menu: MenuCreate,
         db: Session = Depends(get_db)):
@@ -62,7 +73,10 @@ async def create_menu(
     return menu
 
 
-@router.patch("/api/v1/menus/{target_menu_id}")
+@router.patch(
+    "/api/v1/menus/{target_menu_id}",
+    summary="Updates a specific menu"
+)
 async def update_menu(
         menu: MenuUpdate,
         target_menu_id: Optional[UUID | str] = None,
@@ -81,7 +95,10 @@ async def update_menu(
     return existing_menu
 
 
-@router.delete("/api/v1/menus/{target_menu_id}")
+@router.delete(
+    "/api/v1/menus/{target_menu_id}",
+    summary="Deletes a specific menu"
+)
 async def delete_menu(
         target_menu_id: Optional[UUID | str] = None,
         db: Session = Depends(get_db)):

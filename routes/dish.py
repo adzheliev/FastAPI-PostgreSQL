@@ -13,7 +13,12 @@ from uuid import UUID
 router = APIRouter()
 
 
-@router.get("/api/v1/menus/{target_menu_id}/submenus/{target_submenu_id}/dishes")
+@router.get(
+    "/api/v1/menus/{target_menu_id}/submenus/{target_submenu_id}/dishes",
+    status_code=200,
+    description="The price will be rounded to 2 decimal places",
+    summary="Gets a list of dishes in a specific menu and submenu"
+)
 async def get_dishes_list(
         target_menu_id: Optional[UUID | str] = None,
         target_submenu_id: Optional[UUID | str] = None,
@@ -40,7 +45,12 @@ async def get_dishes_list(
     return dishes
 
 
-@router.get("/api/v1/menus/{target_menu_id}/submenus/{target_submenu_id}/dishes/{target_dish_id}")
+@router.get(
+    "/api/v1/menus/{target_menu_id}/submenus/{target_submenu_id}/dishes/{target_dish_id}",
+    status_code=200,
+    description="The price will be rounded to 2 decimal places",
+    summary="Gets a specific dish in a specific menu and submenu"
+)
 async def get_dish(
         target_menu_id: Optional[UUID | str] = None,
         target_submenu_id: Optional[UUID | str] = None,
@@ -73,7 +83,12 @@ async def get_dish(
     return existing_dish
 
 
-@router.patch("/api/v1/menus/{target_menu_id}/submenus/{target_submenu_id}/dishes/{target_dish_id}")
+@router.patch(
+    "/api/v1/menus/{target_menu_id}/submenus/{target_submenu_id}/dishes/{target_dish_id}",
+    status_code=200,
+    description="The price will be rounded to 2 decimal places",
+    summary="Updates a specific dish in a specific menu and submenu"
+)
 async def update_dish(
         dish: DishUpdate,
         target_menu_id: Optional[UUID | str] = None,
@@ -114,7 +129,12 @@ async def update_dish(
     return existing_dish
 
 
-@router.post("/api/v1/menus/{target_menu_id}/submenus/{target_submenu_id}/dishes", status_code=201)
+@router.post(
+    "/api/v1/menus/{target_menu_id}/submenus/{target_submenu_id}/dishes",
+    status_code=201,
+    description="The price will be rounded to 2 decimal places",
+    summary="Creates a new dish in a specific menu and submenu"
+)
 async def create_dish(
         dish: DishCreate,
         target_menu_id: Optional[UUID | str] = None,
@@ -148,7 +168,10 @@ async def create_dish(
     return dish
 
 
-@router.delete("/api/v1/menus/{target_menu_id}/submenus/{target_submenu_id}/dishes/{target_dish_id}")
+@router.delete(
+    "/api/v1/menus/{target_menu_id}/submenus/{target_submenu_id}/dishes/{target_dish_id}",
+    summary="Deletes a specific dish from a specific menu and submenu"
+)
 async def delete_dish(
         target_menu_id: Optional[UUID | str] = None,
         target_submenu_id: Optional[UUID | str] = None,

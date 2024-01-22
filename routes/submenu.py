@@ -13,7 +13,11 @@ from uuid import UUID
 router = APIRouter()
 
 
-@router.get("/api/v1/menus/{target_menu_id}/submenus")
+@router.get(
+    "/api/v1/menus/{target_menu_id}/submenus",
+    status_code=200,
+    summary="Gets a list of submenus in a specific menu"
+)
 async def get_submenus_list(
         target_menu_id: Optional[UUID | str] = None,
         db: Session = Depends(get_db)):
@@ -26,7 +30,11 @@ async def get_submenus_list(
     return submenus
 
 
-@router.get("/api/v1/menus/{target_menu_id}/submenus/{target_submenu_id}")
+@router.get(
+    "/api/v1/menus/{target_menu_id}/submenus/{target_submenu_id}",
+    status_code=200,
+    summary="Gets a specific submenu in a specific menu"
+)
 async def get_submenu(
         target_menu_id: Optional[UUID | str] = None,
         target_submenu_id: Optional[UUID | str] = None,
@@ -50,7 +58,11 @@ async def get_submenu(
     return existing_submenu
 
 
-@router.post("/api/v1/menus/{target_menu_id}/submenus", status_code=201)
+@router.post(
+    "/api/v1/menus/{target_menu_id}/submenus",
+    status_code=201,
+    summary="Creates a new submenu in a specific menu"
+)
 async def create_submenu(
         submenu: SubmenuCreate,
         target_menu_id: Optional[UUID | str] = None,
@@ -71,7 +83,10 @@ async def create_submenu(
     return submenu
 
 
-@router.patch("/api/v1/menus/{target_menu_id}/submenus/{target_submenu_id}")
+@router.patch(
+    "/api/v1/menus/{target_menu_id}/submenus/{target_submenu_id}",
+    summary="Updates a specific submenu in a specific menu"
+)
 async def update_submenu(
         submenu: SubmenuUpdate,
         target_menu_id: Optional[UUID | str] = None,
@@ -99,7 +114,10 @@ async def update_submenu(
     return existing_submenu
 
 
-@router.delete("/api/v1/menus/{target_menu_id}/submenus/{target_submenu_id}")
+@router.delete(
+    "/api/v1/menus/{target_menu_id}/submenus/{target_submenu_id}",
+    summary="Deletes a specific submenu in a specific menu"
+)
 async def delete_submenu(
         target_menu_id: Optional[UUID | str] = None,
         target_submenu_id: Optional[UUID | str] = None,
