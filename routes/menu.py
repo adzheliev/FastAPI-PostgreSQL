@@ -9,7 +9,7 @@ from schemas.menu import MenuCreate, MenuUpdate
 from sqlalchemy.orm import Session
 from uuid import UUID
 
-router = APIRouter()
+router = APIRouter(tags=["Menus API"])
 
 
 @router.get(

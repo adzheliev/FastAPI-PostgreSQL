@@ -10,7 +10,7 @@ from schemas.submenu import SubmenuCreate, SubmenuUpdate
 from sqlalchemy.orm import Session
 from uuid import UUID
 
-router = APIRouter()
+router = APIRouter(tags=["Submenus API"])
 
 
 @router.get(

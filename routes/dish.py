@@ -10,7 +10,7 @@ from schemas.dish import DishCreate, DishUpdate
 from sqlalchemy.orm import Session
 from uuid import UUID
 
-router = APIRouter()
+router = APIRouter(tags=["Dishes API"])
 
 
 @router.get(
