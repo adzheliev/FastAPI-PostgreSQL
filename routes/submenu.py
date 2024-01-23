@@ -10,11 +10,11 @@ from schemas.submenu import SubmenuCreate, SubmenuUpdate
 from sqlalchemy.orm import Session
 from uuid import UUID
 
-router = APIRouter(tags=["Submenus API"])
+router = APIRouter(prefix='/api/v1/menus', tags=["Submenus API"])
 
 
 @router.get(
-    "/api/v1/menus/{target_menu_id}/submenus",
+    "/{target_menu_id}/submenus",
     status_code=200,
     summary="Gets a list of submenus in a specific menu"
 )
@@ -31,7 +31,7 @@ async def get_submenus_list(
 
 
 @router.get(
-    "/api/v1/menus/{target_menu_id}/submenus/{target_submenu_id}",
+    "/{target_menu_id}/submenus/{target_submenu_id}",
     status_code=200,
     summary="Gets a specific submenu in a specific menu"
 )
@@ -59,7 +59,7 @@ async def get_submenu(
 
 
 @router.post(
-    "/api/v1/menus/{target_menu_id}/submenus",
+    "/{target_menu_id}/submenus",
     status_code=201,
     summary="Creates a new submenu in a specific menu"
 )
@@ -84,7 +84,7 @@ async def create_submenu(
 
 
 @router.patch(
-    "/api/v1/menus/{target_menu_id}/submenus/{target_submenu_id}",
+    "/{target_menu_id}/submenus/{target_submenu_id}",
     summary="Updates a specific submenu in a specific menu"
 )
 async def update_submenu(
@@ -115,7 +115,7 @@ async def update_submenu(
 
 
 @router.delete(
-    "/api/v1/menus/{target_menu_id}/submenus/{target_submenu_id}",
+    "/{target_menu_id}/submenus/{target_submenu_id}",
     summary="Deletes a specific submenu in a specific menu"
 )
 async def delete_submenu(

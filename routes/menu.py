@@ -9,11 +9,11 @@ from schemas.menu import MenuCreate, MenuUpdate
 from sqlalchemy.orm import Session
 from uuid import UUID
 
-router = APIRouter(tags=["Menus API"])
+router = APIRouter(prefix='/api/v1/menus', tags=["Menus API"])
 
 
 @router.get(
-    "/api/v1/menus",
+    "/",
     status_code=200,
     summary="Gets a list of menus"
 )
@@ -27,7 +27,7 @@ async def get_menus_list(db: Session = Depends(get_db)):
 
 
 @router.get(
-    "/api/v1/menus/{target_menu_id}",
+    "/{target_menu_id}",
     status_code=200,
     summary="Get specific menu"
 )
@@ -52,7 +52,7 @@ async def get_menu(
 
 
 @router.post(
-    "/api/v1/menus",
+    "/",
     status_code=201,
     summary="Creates a new menu"
 )
@@ -74,7 +74,7 @@ async def create_menu(
 
 
 @router.patch(
-    "/api/v1/menus/{target_menu_id}",
+    "/{target_menu_id}",
     summary="Updates a specific menu"
 )
 async def update_menu(
@@ -96,7 +96,7 @@ async def update_menu(
 
 
 @router.delete(
-    "/api/v1/menus/{target_menu_id}",
+    "/{target_menu_id}",
     summary="Deletes a specific menu"
 )
 async def delete_menu(

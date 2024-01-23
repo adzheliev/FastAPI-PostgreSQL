@@ -10,11 +10,11 @@ from schemas.dish import DishCreate, DishUpdate
 from sqlalchemy.orm import Session
 from uuid import UUID
 
-router = APIRouter(tags=["Dishes API"])
+router = APIRouter(prefix='/api/v1/menus', tags=["Dishes API"])
 
 
 @router.get(
-    "/api/v1/menus/{target_menu_id}/submenus/{target_submenu_id}/dishes",
+    "/{target_menu_id}/submenus/{target_submenu_id}/dishes",
     status_code=200,
     description="The price will be rounded to 2 decimal places",
     summary="Gets a list of dishes in a specific menu and submenu"
@@ -46,7 +46,7 @@ async def get_dishes_list(
 
 
 @router.get(
-    "/api/v1/menus/{target_menu_id}/submenus/{target_submenu_id}/dishes/{target_dish_id}",
+    "/{target_menu_id}/submenus/{target_submenu_id}/dishes/{target_dish_id}",
     status_code=200,
     description="The price will be rounded to 2 decimal places",
     summary="Gets a specific dish in a specific menu and submenu"
@@ -84,7 +84,7 @@ async def get_dish(
 
 
 @router.patch(
-    "/api/v1/menus/{target_menu_id}/submenus/{target_submenu_id}/dishes/{target_dish_id}",
+    "/{target_menu_id}/submenus/{target_submenu_id}/dishes/{target_dish_id}",
     status_code=200,
     description="The price will be rounded to 2 decimal places",
     summary="Updates a specific dish in a specific menu and submenu"
@@ -130,7 +130,7 @@ async def update_dish(
 
 
 @router.post(
-    "/api/v1/menus/{target_menu_id}/submenus/{target_submenu_id}/dishes",
+    "/{target_menu_id}/submenus/{target_submenu_id}/dishes",
     status_code=201,
     description="The price will be rounded to 2 decimal places",
     summary="Creates a new dish in a specific menu and submenu"
@@ -169,7 +169,7 @@ async def create_dish(
 
 
 @router.delete(
-    "/api/v1/menus/{target_menu_id}/submenus/{target_submenu_id}/dishes/{target_dish_id}",
+    "/{target_menu_id}/submenus/{target_submenu_id}/dishes/{target_dish_id}",
     summary="Deletes a specific dish from a specific menu and submenu"
 )
 async def delete_dish(
