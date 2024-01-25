@@ -3,6 +3,8 @@
 from fastapi import APIRouter
 from typing import Optional
 from fastapi import Depends, HTTPException
+from fastapi_cache.decorator import cache
+
 from utils.database import get_db
 from models.menu import Menu
 from models.dish import Dish
@@ -19,6 +21,7 @@ router = APIRouter(prefix='/api/v1/menus', tags=["Dishes API"])
     description="The price will be rounded to 2 decimal places",
     summary="Gets a list of dishes in a specific menu and submenu"
 )
+@cache(expire=30)
 async def get_dishes_list(
         target_menu_id: Optional[UUID | str] = None,
         target_submenu_id: Optional[UUID | str] = None,
@@ -51,6 +54,7 @@ async def get_dishes_list(
     description="The price will be rounded to 2 decimal places",
     summary="Gets a specific dish in a specific menu and submenu"
 )
+@cache(expire=30)
 async def get_dish(
         target_menu_id: Optional[UUID | str] = None,
         target_submenu_id: Optional[UUID | str] = None,

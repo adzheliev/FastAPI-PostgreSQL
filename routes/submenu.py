@@ -9,6 +9,7 @@ from models.submenu import Submenu
 from schemas.submenu import SubmenuCreate, SubmenuUpdate
 from sqlalchemy.orm import Session
 from uuid import UUID
+from fastapi_cache.decorator import cache
 
 router = APIRouter(prefix='/api/v1/menus', tags=["Submenus API"])
 
@@ -18,6 +19,7 @@ router = APIRouter(prefix='/api/v1/menus', tags=["Submenus API"])
     status_code=200,
     summary="Gets a list of submenus in a specific menu"
 )
+@cache(expire=30)
 async def get_submenus_list(
         target_menu_id: Optional[UUID | str] = None,
         db: Session = Depends(get_db)):
@@ -35,6 +37,7 @@ async def get_submenus_list(
     status_code=200,
     summary="Gets a specific submenu in a specific menu"
 )
+@cache(expire=30)
 async def get_submenu(
         target_menu_id: Optional[UUID | str] = None,
         target_submenu_id: Optional[UUID | str] = None,
