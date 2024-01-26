@@ -6,8 +6,9 @@ from routes import menu, submenu, dish
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
 from redis import asyncio as aioredis
+from sqlalchemy import MetaData
 
-
+metadata = MetaData()
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
