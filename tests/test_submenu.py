@@ -69,16 +69,16 @@ class TestSubmenu:
         assert type(response.json()[0]["description"]) == str
         assert type(response.json()[0]["menu_id"]) == str
 
-    async def test_post_menu_wit_same_parameters(self, ac: AsyncClient) -> None:
+    async def test_post_submenu_wit_same_parameters(self, ac: AsyncClient) -> None:
         """Testing menu post endpoint with duplicate of menu"""
         data = {
             "title": "My submenu 1",
             "description": "My submenu description 1"
         }
-        response = await ac.post(f"/api/v1/menus/{TestSubmenu.menu_id}/submenus/", json=data)
+        response = await ac.post(f"/api/v1/menus/{TestSubmenu.menu_id}/submenus", json=data)
 
         """Testing status code"""
-        assert response.status_code == HTTPStatus.TEMPORARY_REDIRECT
+        assert response.status_code == HTTPStatus.CONFLICT
     #
     # async def test_number_of_menus_in_menus_list_after_duplicate_post(self, ac: AsyncClient) -> None:
     #     """Testing number of menus in menus list after duplicate post"""

@@ -79,17 +79,19 @@ async def create_submenu(
         existing_menu = db.query(Menu).filter_by(id=target_menu_id).first()
         if not existing_menu:
             raise HTTPException(status_code=404, detail="menu not found")
+
+        submenu = Submenu(
+            title=submenu.title,
+            description=submenu.description,
+            menu_id=target_menu_id
+        )
+        db.add(submenu)
+        db.commit()
+        db.refresh(submenu)
+
     except Exception as e:
         raise HTTPException(status_code=HTTPStatus.CONFLICT,
                             detail="Submenu with same title already exists")
-    submenu = Submenu(
-        title=submenu.title,
-        description=submenu.description,
-        menu_id=target_menu_id
-    )
-    db.add(submenu)
-    db.commit()
-    db.refresh(submenu)
     return submenu
 
 
