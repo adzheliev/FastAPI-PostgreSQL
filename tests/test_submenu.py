@@ -165,3 +165,11 @@ class TestSubmenu:
 
         """Testing status code"""
         assert response.status_code == HTTPStatus.OK
+
+    async def test_delete_existing_menu(self, ac: AsyncClient) -> None:
+        """Testing existing menu delete"""
+
+        response = await ac.delete(f"/api/v1/menus/{TestSubmenu.menu_id}")
+
+        """Testing status code"""
+        assert response.status_code == HTTPStatus.OK
