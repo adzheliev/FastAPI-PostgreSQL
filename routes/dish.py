@@ -1,4 +1,5 @@
 """Routes for Dish CRUD requests"""
+from http import HTTPStatus
 
 from fastapi import APIRouter
 from typing import Optional
@@ -146,25 +147,29 @@ async def create_dish(
         db: Session = Depends(get_db)):
     """Function creates a new dish in a specific menu and submenu"""
 
-    existing_menu = db.query(Menu).filter_by(id=target_menu_id).first()
-    if not existing_menu:
-        raise HTTPException(status_code=404, detail="menu not found")
+    try:
+        existing_menu = db.query(Menu).filter_by(id=target_menu_id).first()
+        if not existing_menu:
+            raise HTTPException(status_code=404, detail="menu not found")
 
-    existing_submenu = None
-    for submenu in existing_menu.submenus:
-        if str(submenu.id) == target_submenu_id:
-            existing_submenu = submenu
-            break
+        existing_submenu = None
+        for submenu in existing_menu.submenus:
+            if str(submenu.id) == target_submenu_id:
+                existing_submenu = submenu
+                break
 
-    if not existing_submenu:
-        raise HTTPException(status_code=404, detail="submenu not found")
+        if not existing_submenu:
+            raise HTTPException(status_code=404, detail="submenu not found")
 
-    dish = Dish(
-        title=dish.title,
-        price="{:.2f}".format(float(dish.price)),
-        submenu_id=target_submenu_id,
-        description=dish.description
-    )
+        dish = Dish(
+            title=dish.title,
+            price="{:.2f}".format(float(dish.price)),
+            submenu_id=target_submenu_id,
+            description=dish.description
+        )
+    except Exception as e:
+        raise HTTPException(status_code=HTTPStatus.CONFLICT,
+                            detail="Dish with same title already exists")
 
     db.add(dish)
     db.commit()
