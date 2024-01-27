@@ -115,7 +115,7 @@ class TestMenu:
         assert type(response.json()["submenus_count"]) == int
         assert type(response.json()["dishes_count"]) == int
 
-    async def test_post_non_validated_data(self, ac: AsyncClient) -> None:
+    async def test_post_non_validated_data_in_menu(self, ac: AsyncClient) -> None:
         """Testing menu post endpoint with non validated data"""
         data = {
             "name": "My menu 1",
