@@ -131,3 +131,19 @@ class TestMenu:
 
         """Testing status code"""
         assert response.status_code == HTTPStatus.NOT_FOUND
+
+    async def test_delete_not_existing_menu(self, ac: AsyncClient) -> None:
+        """Testing non existing menu delete"""
+
+        response = await ac.delete("/api/v1/menus/non_existing_menu")
+
+        """Testing status code"""
+        assert response.status_code == HTTPStatus.NOT_FOUND
+
+    async def test_delete_existing_menu(self, ac: AsyncClient) -> None:
+        """Testing existing menu patch"""
+
+        response = await ac.delete(f"/api/v1/menus/{TestMenu.menu_id}")
+
+        """Testing status code"""
+        assert response.status_code == HTTPStatus.OK
