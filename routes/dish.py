@@ -166,14 +166,14 @@ async def create_dish(
             price="{:.2f}".format(float(dish.price)),
             submenu_id=target_submenu_id,
             description=dish.description
-        )
+            )
+
+        db.add(dish)
+        db.commit()
+        db.refresh(dish)
     except Exception as e:
         raise HTTPException(status_code=HTTPStatus.CONFLICT,
                             detail="Dish with same title already exists")
-
-    db.add(dish)
-    db.commit()
-    db.refresh(dish)
     return dish
 
 
