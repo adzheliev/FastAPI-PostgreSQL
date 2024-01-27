@@ -1,4 +1,5 @@
 """Routes for Submenu CRUD requests"""
+from http import HTTPStatus
 
 from fastapi import APIRouter
 from typing import Optional
@@ -24,10 +25,13 @@ async def get_submenus_list(
         target_menu_id: Optional[UUID | str] = None,
         db: Session = Depends(get_db)):
     """Function gets a list of submenus in a specific menu"""
-
-    existing_menu = db.query(Menu).filter_by(id=target_menu_id).first()
-    if not existing_menu:
-        raise HTTPException(status_code=404, detail="menu not found")
+    try:
+        existing_menu = db.query(Menu).filter_by(id=target_menu_id).first()
+        if not existing_menu:
+            raise HTTPException(status_code=404, detail="menu not found")
+    except Exception as e:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND,
+                            detail="menu not found")
     submenus = existing_menu.submenus
     return submenus
 
@@ -71,10 +75,13 @@ async def create_submenu(
         target_menu_id: Optional[UUID | str] = None,
         db: Session = Depends(get_db)):
     """Function creates submenu in a specific menu"""
-
-    existing_menu = db.query(Menu).filter_by(id=target_menu_id).first()
-    if not existing_menu:
-        raise HTTPException(status_code=404, detail="menu not found")
+    try:
+        existing_menu = db.query(Menu).filter_by(id=target_menu_id).first()
+        if not existing_menu:
+            raise HTTPException(status_code=404, detail="menu not found")
+    except Exception as e:
+        raise HTTPException(status_code=HTTPStatus.CONFLICT,
+                            detail="Submenu with same title already exists")
     submenu = Submenu(
         title=submenu.title,
         description=submenu.description,

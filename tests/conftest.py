@@ -8,7 +8,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import NullPool
 from main import metadata
 from config import (DB_HOST_TEST, DB_NAME_TEST, DB_PASS_TEST, DB_PORT_TEST,
-                    DB_USER_TEST)
+                    DB_USER_TEST, MODE)
 from main import app
 from utils.database import Base
 
@@ -29,13 +29,13 @@ async def override_get_async_session() -> AsyncGenerator[AsyncSession, None]:
     async with async_session_maker() as session:
         yield session
 
-
 app.dependency_overrides[get_async_session] = override_get_async_session
 
 
 @pytest.fixture(autouse=True, scope='session')
 async def prepare_database():
-    async with engine_test.begin() as conn:
+    async with (engine_test.begin() as conn):
+        assert MODE == 'TEST'
         await conn.run_sync(Base.metadata.drop_all)
         await conn.run_sync(Base.metadata.create_all)
     yield
@@ -43,7 +43,6 @@ async def prepare_database():
         await conn.run_sync(Base.metadata.drop_all)
 
 
-# SETUP
 @pytest.fixture(scope='session')
 def event_loop(request):
     loop = asyncio.get_event_loop_policy().new_event_loop()

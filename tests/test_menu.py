@@ -1,8 +1,11 @@
+"""Tests for Menu CRUD requests"""
+
 from http import HTTPStatus
 from httpx import AsyncClient
 
 
 class TestMenu:
+    """Main class for Menu tests"""
     menu_id = None
 
     async def test_empty_menu_list(self, ac: AsyncClient) -> None:
@@ -21,6 +24,7 @@ class TestMenu:
 
         """Testing status code"""
         assert response.status_code == HTTPStatus.CREATED
+        TestMenu.menu_id = response.json()["id"]
 
     async def test_not_empty_menu_list(self, ac: AsyncClient) -> None:
         """Testing not empty menus list endpoint"""
@@ -40,12 +44,14 @@ class TestMenu:
         assert "dishes_count" in response.json()[0]
 
         """Testing all fields values"""
+        assert response.json()[0]["id"] == TestMenu.menu_id
         assert response.json()[0]["title"] == "My menu 1"
         assert response.json()[0]["description"] == "My menu description 1"
         assert response.json()[0]["submenus_count"] == 0
         assert response.json()[0]["dishes_count"] == 0
 
         """Testing all fields values types"""
+        assert type(response.json()[0]["id"]) == str
         assert type(response.json()[0]["title"]) == str
         assert type(response.json()[0]["description"]) == str
         assert type(response.json()[0]["submenus_count"]) == int
@@ -71,7 +77,6 @@ class TestMenu:
 
         """Testing number of menus created"""
         assert len(response.json()) == 1
-        TestMenu.menu_id = response.json()[0]["id"]
 
     async def test_patch_menu(self, ac: AsyncClient) -> None:
         """Testing menu patch endpoint"""
@@ -141,7 +146,7 @@ class TestMenu:
         assert response.status_code == HTTPStatus.NOT_FOUND
 
     async def test_delete_existing_menu(self, ac: AsyncClient) -> None:
-        """Testing existing menu patch"""
+        """Testing existing menu delete"""
 
         response = await ac.delete(f"/api/v1/menus/{TestMenu.menu_id}")
 

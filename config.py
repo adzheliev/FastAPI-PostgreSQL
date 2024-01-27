@@ -17,5 +17,7 @@ DB_NAME_TEST = os.environ.get("DB_NAME_TEST")
 DB_USER_TEST = os.environ.get("DB_USER_TEST")
 DB_PASS_TEST = os.environ.get("DB_PASS_TEST")
 
+MODE = os.environ.get("MODE")
+
 SQLALCHEMY_DATABASE_URL = f'postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
 
