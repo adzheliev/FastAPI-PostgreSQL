@@ -1,4 +1,5 @@
 """Routes for Menu CRUD requests"""
+from http import HTTPStatus
 
 from fastapi import APIRouter
 from typing import Optional
@@ -63,6 +64,14 @@ async def create_menu(
         menu: MenuCreate,
         db: Session = Depends(get_db)):
     """Function creates a new menu"""
+    try:
+        existing_menu = db.query(Menu).filter_by(title=menu.title).first()
+        if existing_menu:
+            raise HTTPException(status_code=HTTPStatus.CONFLICT, detail="Menu with same title already exists")
+    except Exception as e:
+        print('An unexpected exception occurred:', e)
+        raise HTTPException(status_code=HTTPStatus.CONFLICT,
+                            detail="Menu with same title already exists")
 
     menu = Menu(
         title=menu.title,
@@ -70,6 +79,7 @@ async def create_menu(
         submenus_count=0,
         dishes_count=0
     )
+
     db.add(menu)
     db.commit()
     db.refresh(menu)

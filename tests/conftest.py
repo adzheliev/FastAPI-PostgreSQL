@@ -6,11 +6,11 @@ from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import NullPool
-from utils.database import Base
 from main import metadata
 from config import (DB_HOST_TEST, DB_NAME_TEST, DB_PASS_TEST, DB_PORT_TEST,
                     DB_USER_TEST)
 from main import app
+from utils.database import Base
 
 
 async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
@@ -35,7 +35,6 @@ app.dependency_overrides[get_async_session] = override_get_async_session
 
 @pytest.fixture(autouse=True, scope='session')
 async def prepare_database():
-    print('Preparing database')
     async with engine_test.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)
         await conn.run_sync(Base.metadata.create_all)
