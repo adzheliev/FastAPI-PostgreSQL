@@ -69,7 +69,6 @@ async def create_menu(
         if existing_menu:
             raise HTTPException(status_code=HTTPStatus.CONFLICT, detail="Menu with same title already exists")
     except Exception as e:
-        print('An unexpected exception occurred:', e)
         raise HTTPException(status_code=HTTPStatus.CONFLICT,
                             detail="Menu with same title already exists")
 
@@ -95,10 +94,13 @@ async def update_menu(
         target_menu_id: Optional[UUID | str] = None,
         db: Session = Depends(get_db)):
     """Function updates a specific menu"""
-
-    existing_menu = db.query(Menu).filter_by(id=target_menu_id).first()
-    if not existing_menu:
-        raise HTTPException(status_code=404, detail="menu not found")
+    try:
+        existing_menu = db.query(Menu).filter_by(id=target_menu_id).first()
+        if not existing_menu:
+            raise HTTPException(status_code=404, detail="menu not found")
+    except Exception as e:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND,
+                            detail="Menu with same title already exists")
 
     existing_menu.title = menu.title
     existing_menu.id = target_menu_id
