@@ -1,4 +1,6 @@
-## Y_lab step 1
+<span style="font-family: Tahoma;"> 
+
+## Y_lab
 
 ### To run locally
 
@@ -7,31 +9,25 @@ Open your IDE of choice and clone this repository
 ```bash
 git clone https://github.com/adzheliev/Y_lab.git
 ```
-From project directory create a virtual env with following command in yor terminal
+To run **test for application**, please use following command on yor terminal
 
 ```bash
-python3 -m venv .venv   
+docker compose -f docker-compose-tests.yml up
 ```
 
-And activate virtual env with following command in yor terminal
+Once tests are completed use following command on yor terminal to remove test containers
 ```bash
-source ./venv/bin/activate    
+docker compose -f docker-compose-tests.yml down    
 ```
 
-Install dependencies with following command in yor terminal
+To run **application**, please use following command on yor terminal
 
 ```bash
-pip install -r requirements.txt
+docker compose -f docker-compose.yml up 
 ```
-Once all is installed, run the app with following command in yor terminal
+Once you finished testing the application use following command on yor terminal to remove containers
 ```bash
-uvicorn main:app --reload
-```    
-Now the app is running. Swagger documentation is available on
-```bash
-http://127.0.0.1:8000/docs
-```  
+docker compose -f docker-compose.yml down    
+```
 
-Feel free to test it or import tests file (attached) in your postman 
-
-.env file is available for testing purposes
+</span>
