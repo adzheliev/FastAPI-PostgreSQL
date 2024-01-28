@@ -4,8 +4,11 @@ from http import HTTPStatus
 from fastapi import APIRouter
 from typing import Optional
 from fastapi import Depends, HTTPException
+from sqlalchemy import func
+
 from utils.database import get_db
 from models.menu import Menu
+from models.submenu import Submenu
 from schemas.menu import MenuCreate, MenuUpdate
 from sqlalchemy.orm import Session
 from uuid import UUID
@@ -42,7 +45,17 @@ async def get_menu(
 
     if target_menu_id is not None:
         menu = db.query(Menu).filter_by(id=target_menu_id).first()
+        # result = db.query(
+        #     func.count(Submenu.id.distinct()).label("submenus_count"),
+        #     func.sum(Submenu.dishes_count).label("dishes_count")
+        # ).filter(
+        #     Submenu.menu_id == target_menu_id
+        # ).first()
+        # print(result.submenus_count)
         if menu:
+            # menu.submenus_count = result.submenus_count
+            # menu.dishes_count = result.dishes_count
+            # return menu
             menu.submenus_count = len(menu.submenus)
             if menu.submenus_count > 0:
                 total = 0

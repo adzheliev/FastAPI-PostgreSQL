@@ -8,7 +8,7 @@ class TestDishes:
     """Main class for Dishes tests"""
     menu_id = None
     submenu_id = None
-    dish_id =None
+    dish_id = None
 
     async def test_post_menu_for_submenus_and_dishes(self, ac: AsyncClient) -> None:
         """Testing menu post endpoint"""
@@ -47,7 +47,8 @@ class TestDishes:
             "description": "My dish description 1",
             "price": "13.40"
         }
-        response = await ac.post(f"/api/v1/menus/{TestDishes.menu_id}/submenus/{TestDishes.submenu_id}/dishes", json=data)
+        response = await ac.post(f"/api/v1/menus/{TestDishes.menu_id}/submenus/{TestDishes.submenu_id}/dishes",
+                                 json=data)
 
         """Testing status code"""
         assert response.status_code == HTTPStatus.CREATED
@@ -91,7 +92,8 @@ class TestDishes:
             "description": "My dish description 1",
             "price": "13.40"
         }
-        response = await ac.post(f"/api/v1/menus/{TestDishes.menu_id}/submenus/{TestDishes.submenu_id}/dishes", json=data)
+        response = await ac.post(f"/api/v1/menus/{TestDishes.menu_id}/submenus/{TestDishes.submenu_id}/dishes",
+                                 json=data)
 
         """Testing status code"""
         assert response.status_code == HTTPStatus.CONFLICT
@@ -113,14 +115,17 @@ class TestDishes:
             "description": "My updated dish description 1",
             "price": "10.22"
         }
-        response = await ac.patch(f"/api/v1/menus/{TestDishes.menu_id}/submenus/{TestDishes.submenu_id}/dishes/{TestDishes.dish_id}", json=data)
+        response = await ac.patch(
+            f"/api/v1/menus/{TestDishes.menu_id}/submenus/{TestDishes.submenu_id}/dishes/{TestDishes.dish_id}",
+            json=data)
 
         """Testing status code"""
         assert response.status_code == HTTPStatus.OK
 
     async def test_specific_patched_dish(self, ac: AsyncClient) -> None:
         """Testing patched dish"""
-        response = await ac.get(f"/api/v1/menus/{TestDishes.menu_id}/submenus/{TestDishes.submenu_id}/dishes/{TestDishes.dish_id}")
+        response = await ac.get(
+            f"/api/v1/menus/{TestDishes.menu_id}/submenus/{TestDishes.submenu_id}/dishes/{TestDishes.dish_id}")
 
         """Testing status code"""
         assert response.status_code == HTTPStatus.OK
@@ -149,13 +154,25 @@ class TestDishes:
         assert type(response.json()["submenu_id"]) == str
         assert type(response.json()["price"]) == str
 
+    async def test_number_of_submenus_and_dishes_in_specific_menu(self, ac: AsyncClient) -> None:
+        """Testing number of submenus and dishes_in specific menu"""
+        response = await ac.get(f"/api/v1/menus/{TestDishes.menu_id}")
+
+        """Testing status code"""
+        assert response.status_code == HTTPStatus.OK
+
+        """Testing number of submenus and dishes"""
+        assert response.json()['submenus_count'] == 1
+        assert response.json()['dishes_count'] == 1
+
     async def test_post_non_validated_data_in_dish(self, ac: AsyncClient) -> None:
         """Testing dish post endpoint with non validated data"""
         data = {
             "name": "My menu 1",
             "description": 1
         }
-        response = await ac.post(f"/api/v1/menus/{TestDishes.menu_id}/submenus/{TestDishes.submenu_id}/dishes", json=data)
+        response = await ac.post(f"/api/v1/menus/{TestDishes.menu_id}/submenus/{TestDishes.submenu_id}/dishes",
+                                 json=data)
 
         """Testing status code"""
         assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
@@ -167,7 +184,8 @@ class TestDishes:
             "description": "My once again updated menu description 1",
             "price": "9.45"
         }
-        response = await ac.patch(f"/api/v1/menus/{TestDishes.menu_id}/submenus/{TestDishes.submenu_id}/dishes/not_existing_dish", json=data)
+        response = await ac.patch(
+            f"/api/v1/menus/{TestDishes.menu_id}/submenus/{TestDishes.submenu_id}/dishes/not_existing_dish", json=data)
 
         """Testing status code"""
         assert response.status_code == HTTPStatus.NOT_FOUND
@@ -175,7 +193,8 @@ class TestDishes:
     async def test_delete_not_existing_dish(self, ac: AsyncClient) -> None:
         """Testing non existing dish delete"""
 
-        response = await ac.delete(f"/api/v1/menus/{TestDishes.menu_id}/submenus/{TestDishes.submenu_id}/dishes/not_existing_dish")
+        response = await ac.delete(
+            f"/api/v1/menus/{TestDishes.menu_id}/submenus/{TestDishes.submenu_id}/dishes/not_existing_dish")
 
         """Testing status code"""
         assert response.status_code == HTTPStatus.NOT_FOUND
@@ -183,7 +202,8 @@ class TestDishes:
     async def test_delete_existing_dish(self, ac: AsyncClient) -> None:
         """Testing existing dish delete"""
 
-        response = await ac.delete(f"/api/v1/menus/{TestDishes.menu_id}/submenus/{TestDishes.submenu_id}/dishes/{TestDishes.dish_id}")
+        response = await ac.delete(
+            f"/api/v1/menus/{TestDishes.menu_id}/submenus/{TestDishes.submenu_id}/dishes/{TestDishes.dish_id}")
 
         """Testing status code"""
         assert response.status_code == HTTPStatus.OK
@@ -203,4 +223,3 @@ class TestDishes:
 
         """Testing status code"""
         assert response.status_code == HTTPStatus.OK
-
