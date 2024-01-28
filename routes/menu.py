@@ -51,7 +51,6 @@ async def get_menu(
         # ).filter(
         #     Submenu.menu_id == target_menu_id
         # ).first()
-        # print(result.submenus_count)
         if menu:
             # menu.submenus_count = result.submenus_count
             # menu.dishes_count = result.dishes_count
