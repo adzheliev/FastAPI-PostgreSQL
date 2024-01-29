@@ -8,27 +8,40 @@ class TestMenu:
     """Main class for Menu tests"""
     menu_id = None
 
-    async def test_empty_menu_list(self, ac: AsyncClient) -> None:
+    async def test_empty_menu_list(
+            self,
+            ac: AsyncClient) -> None:
         """Testing menus list endpoint with empty list"""
-        response = await ac.get("/api/v1/menus/")
+        response = await ac.get(
+            "/api/v1/menus/"
+        )
         assert response.status_code == HTTPStatus.OK
         assert response.json() == []
 
-    async def test_post_menu(self, ac: AsyncClient) -> None:
+    async def test_post_menu(
+            self,
+            ac: AsyncClient) -> None:
         """Testing menu post endpoint"""
         data = {
             "title": "My menu 1",
             "description": "My menu description 1"
         }
-        response = await ac.post("/api/v1/menus/", json=data)
+        response = await ac.post(
+            "/api/v1/menus/",
+            json=data
+        )
 
         """Testing status code"""
         assert response.status_code == HTTPStatus.CREATED
         TestMenu.menu_id = response.json()["id"]
 
-    async def test_not_empty_menu_list(self, ac: AsyncClient) -> None:
+    async def test_not_empty_menu_list(
+            self,
+            ac: AsyncClient) -> None:
         """Testing not empty menus list endpoint"""
-        response = await ac.get("/api/v1/menus/")
+        response = await ac.get(
+            "/api/v1/menus/"
+        )
 
         """Testing status code"""
         assert response.status_code == HTTPStatus.OK
@@ -57,20 +70,29 @@ class TestMenu:
         assert type(response.json()[0]["submenus_count"]) == int
         assert type(response.json()[0]["dishes_count"]) == int
 
-    async def test_post_menu_wit_same_parameters(self, ac: AsyncClient) -> None:
+    async def test_post_menu_wit_same_parameters(
+            self,
+            ac: AsyncClient) -> None:
         """Testing menu post endpoint with duplicate of menu"""
         data = {
             "title": "My menu 1",
             "description": "My menu description 1"
         }
-        response = await ac.post("/api/v1/menus/", json=data)
+        response = await ac.post(
+            "/api/v1/menus/",
+            json=data
+        )
 
         """Testing status code"""
         assert response.status_code == HTTPStatus.CONFLICT
 
-    async def test_number_of_menus_in_menus_list_after_duplicate_post(self, ac: AsyncClient) -> None:
+    async def test_number_of_menus_in_menus_list_after_duplicate_post(
+            self,
+            ac: AsyncClient) -> None:
         """Testing number of menus in menus list after duplicate post"""
-        response = await ac.get("/api/v1/menus/")
+        response = await ac.get(
+            "/api/v1/menus/"
+        )
 
         """Testing status code"""
         assert response.status_code == HTTPStatus.OK
@@ -78,20 +100,29 @@ class TestMenu:
         """Testing number of menus created"""
         assert len(response.json()) == 1
 
-    async def test_patch_menu(self, ac: AsyncClient) -> None:
+    async def test_patch_menu(
+            self,
+            ac: AsyncClient) -> None:
         """Testing menu patch endpoint"""
         data = {
             "title": "My updated menu 1",
             "description": "My updated menu description 1"
         }
-        response = await ac.patch(f"/api/v1/menus/{TestMenu.menu_id}", json=data)
+        response = await ac.patch(
+            f"/api/v1/menus/{TestMenu.menu_id}",
+            json=data
+        )
 
         """Testing status code"""
         assert response.status_code == HTTPStatus.OK
 
-    async def test_specific_patched_menu(self, ac: AsyncClient) -> None:
+    async def test_specific_patched_menu(
+            self,
+            ac: AsyncClient) -> None:
         """Testing patched menu"""
-        response = await ac.get(f"/api/v1/menus/{TestMenu.menu_id}")
+        response = await ac.get(
+            f"/api/v1/menus/{TestMenu.menu_id}"
+        )
 
         """Testing status code"""
         assert response.status_code == HTTPStatus.OK
@@ -115,40 +146,58 @@ class TestMenu:
         assert type(response.json()["submenus_count"]) == int
         assert type(response.json()["dishes_count"]) == int
 
-    async def test_post_non_validated_data_in_menu(self, ac: AsyncClient) -> None:
+    async def test_post_non_validated_data_in_menu(
+            self,
+            ac: AsyncClient) -> None:
         """Testing menu post endpoint with non validated data"""
         data = {
             "name": "My menu 1",
             "description": 1
         }
-        response = await ac.post("/api/v1/menus/", json=data)
+        response = await ac.post(
+            "/api/v1/menus/",
+            json=data
+        )
 
         """Testing status code"""
         assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
 
-    async def test_patch_not_existing_menu(self, ac: AsyncClient) -> None:
+    async def test_patch_not_existing_menu(
+            self,
+            ac: AsyncClient) -> None:
         """Testing non existing menu patch"""
         data = {
             "title": "My once again updated menu 1",
             "description": "My once again updated menu description 1"
         }
-        response = await ac.patch(f"/api/v1/menus/non_existing_menu", json=data)
+        response = await ac.patch(
+            "/api/v1/menus/non_existing_menu",
+            json=data
+        )
 
         """Testing status code"""
         assert response.status_code == HTTPStatus.NOT_FOUND
 
-    async def test_delete_not_existing_menu(self, ac: AsyncClient) -> None:
+    async def test_delete_not_existing_menu(
+            self,
+            ac: AsyncClient) -> None:
         """Testing non existing menu delete"""
 
-        response = await ac.delete("/api/v1/menus/non_existing_menu")
+        response = await ac.delete(
+            "/api/v1/menus/non_existing_menu"
+        )
 
         """Testing status code"""
         assert response.status_code == HTTPStatus.NOT_FOUND
 
-    async def test_delete_existing_menu(self, ac: AsyncClient) -> None:
+    async def test_delete_existing_menu(
+            self,
+            ac: AsyncClient) -> None:
         """Testing existing menu delete"""
 
-        response = await ac.delete(f"/api/v1/menus/{TestMenu.menu_id}")
+        response = await ac.delete(
+            f"/api/v1/menus/{TestMenu.menu_id}"
+        )
 
         """Testing status code"""
         assert response.status_code == HTTPStatus.OK
