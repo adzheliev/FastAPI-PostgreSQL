@@ -26,4 +26,4 @@ class Submenu(Base):
         back_populates='submenu',
         cascade='all, delete'
     )
-    dishes_count = Column(Integer)
+    dishes_count = Column(Integer, default=0)

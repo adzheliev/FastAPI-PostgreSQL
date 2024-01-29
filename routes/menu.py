@@ -6,6 +6,7 @@ from typing import Optional
 from fastapi import Depends, HTTPException
 from sqlalchemy import func
 
+from models.dish import Dish
 from utils.database import get_db
 from models.menu import Menu
 from models.submenu import Submenu
@@ -44,27 +45,15 @@ async def get_menu(
     """Function gets a specific menu"""
 
     if target_menu_id is not None:
-        menu = db.query(Menu).filter_by(id=target_menu_id).first()
-        # result = db.query(
-        #     func.count(Submenu.id.distinct()).label("submenus_count"),
-        #     func.sum(Submenu.dishes_count).label("dishes_count")
-        # ).filter(
-        #     Submenu.menu_id == target_menu_id
-        # ).first()
-        if menu:
-            # menu.submenus_count = result.submenus_count
-            # menu.dishes_count = result.dishes_count
-            # return menu
-            menu.submenus_count = len(menu.submenus)
-            if menu.submenus_count > 0:
-                total = 0
-                for item in menu.submenus:
-                    submenu_dishes_count = len(item.dishes)
-                    total += submenu_dishes_count
-                menu.dishes_count = total
-            return menu
-        raise HTTPException(status_code=404, detail="menu not found")
-    return None
+        menu = db.query(Menu.id, Menu.title, Menu.description, func.count(Submenu.id).label('submenus_count'),
+                        func.count(Dish.id).label('dishes_count')). \
+            outerjoin(Submenu, Submenu.menu_id == Menu.id). \
+            outerjoin(Dish, Dish.submenu_id == Submenu.id). \
+            filter(Menu.id == target_menu_id). \
+            group_by(Menu.id). \
+            first()
+        return menu
+    raise HTTPException(status_code=404, detail="menu not found")
 
 
 @router.post(

@@ -61,7 +61,7 @@ class TestSubmenu:
         assert response.json()[0]["title"] == "My submenu 1"
         assert response.json()[0]["description"] == "My submenu description 1"
         assert response.json()[0]["menu_id"] == TestSubmenu.menu_id
-        assert response.json()[0]["dishes_count"] is None
+        assert response.json()[0]["dishes_count"] == 0
 
         """Testing all fields values types"""
         assert type(response.json()[0]["id"]) == str
