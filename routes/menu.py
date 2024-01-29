@@ -13,7 +13,6 @@ from models.submenu import Submenu
 from schemas.menu import MenuCreate, MenuUpdate
 from sqlalchemy.orm import Session
 from uuid import UUID
-from fastapi_cache.decorator import cache
 
 router = APIRouter(prefix='/api/v1/menus', tags=["Menus API"])
 
@@ -23,7 +22,6 @@ router = APIRouter(prefix='/api/v1/menus', tags=["Menus API"])
     status_code=200,
     summary="Gets a list of menus"
 )
-# @cache(expire=30)
 async def get_menus_list(db: Session = Depends(get_db)):
     """Function gets a list of menus"""
 
@@ -38,7 +36,6 @@ async def get_menus_list(db: Session = Depends(get_db)):
     status_code=200,
     summary="Get specific menu"
 )
-# @cache(expire=30)
 async def get_menu(
         target_menu_id: Optional[UUID | str] = None,
         db: Session = Depends(get_db)):
