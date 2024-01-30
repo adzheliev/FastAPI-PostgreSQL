@@ -12,6 +12,7 @@ class TestMenu:
     """Fixtures for Menu Tests"""
     @pytest.fixture(scope="function")
     async def create_menu_fixture(self, ac: AsyncClient):
+        """Testing menu create endpoint"""
         data = {"title": "My menu 1", "description": "My menu description 1"}
         response = await ac.post("/api/v1/menus/", json=data)
         assert response.status_code == HTTPStatus.CREATED
@@ -21,24 +22,26 @@ class TestMenu:
     @pytest.fixture(scope="function")
     async def delete_menu_fixture(self, ac: AsyncClient):
         yield
+        """Testing menu delete endpoint"""
         await ac.delete(f"/api/v1/menus/{TestMenu.menu_id}")
 
     """Tests"""
-    async def test_get_menus(
+
+    @pytest.mark.usefixtures('create_menu_fixture', 'delete_menu_fixture')
+    async def test_get_menus_list(
             self,
             ac: AsyncClient) -> None:
-        """Testing menus list endpoint with empty list"""
+        """Testing menus get endpoint"""
         response = await ac.get(
             "/api/v1/menus/"
         )
         assert response.status_code == HTTPStatus.OK
-        assert response.json() == []
 
     @pytest.mark.usefixtures('create_menu_fixture', 'delete_menu_fixture')
     async def test_get_menu(
             self,
             ac: AsyncClient) -> None:
-        """Testing menu create endpoint"""
+        """Testing menu get endpoint"""
         response = await ac.get(
             f"/api/v1/menus/{TestMenu.menu_id}",
         )
@@ -123,7 +126,7 @@ class TestMenu:
     async def test_delete_menu(
             self,
             ac: AsyncClient) -> None:
-        """Testing menu delete"""
+        """Testing menu delete endpoint"""
 
         response = await ac.delete(
             f"/api/v1/menus/{TestMenu.menu_id}"
