@@ -6,296 +6,86 @@ from httpx import AsyncClient
 
 class TestScenario:
     """Main class for Tests scenario"""
-    menu_id = None
-    submenu_id = None
-    dish_id = None
-    second_dish_id = None
 
-    async def test_post_menu_for_submenus_and_dishes_scenario(
-            self,
-            ac: AsyncClient) -> None:
-        """Testing menu post endpoint"""
-        data = {
+    async def test_dish_and_submenu_quantity(self, ac: AsyncClient):
+        """Testing dish create endpoint"""
+        data_for_menu = {
             "title": "My menu 1",
             "description": "My menu description 1"
         }
-        response = await ac.post(
+        response_to_menu_creation = await ac.post(
             "/api/v1/menus/",
-            json=data
+            json=data_for_menu
         )
+        assert response_to_menu_creation.status_code == HTTPStatus.CREATED
+        TestScenario.menu_id = response_to_menu_creation.json()["id"]
 
-        """Testing status code"""
-        assert response.status_code == HTTPStatus.CREATED
-        TestScenario.menu_id = response.json()["id"]
-
-    async def test_post_submenu_for_dishes_scenario(
-            self,
-            ac: AsyncClient) -> None:
-        """Testing submenu post endpoint"""
-        data = {
+        data_for_submenu = {
             "title": "My submenu 1",
             "description": "My submenu description 1"
         }
-        response = await ac.post(
+        response_to_submenu_creation = await ac.post(
             f"/api/v1/menus/{TestScenario.menu_id}/submenus",
-            json=data
+            json=data_for_submenu
         )
 
-        """Testing status code"""
-        assert response.status_code == HTTPStatus.CREATED
-        TestScenario.submenu_id = response.json()["id"]
+        assert response_to_submenu_creation.status_code == HTTPStatus.CREATED
+        TestScenario.submenu_id = response_to_submenu_creation.json()["id"]
 
-    async def test_empty_dishes_list_scenario(
-            self,
-            ac: AsyncClient) -> None:
-        """Testing dishes list endpoint with empty list"""
-        response = await ac.get(
-            f"/api/v1/menus/{TestScenario.menu_id}/submenus/{TestScenario.submenu_id}/dishes"
-        )
-        assert response.status_code == HTTPStatus.OK
-        assert response.json() == []
-
-    async def test_post_dish(
-            self,
-            ac: AsyncClient) -> None:
-        """Testing dish post endpoint"""
-        data = {
+        data_for_dish = {
             "title": "My dish 1",
             "description": "My dish description 1",
-            "price": "13.40"
+            "price": "20.55"
         }
-        response = await ac.post(
+        response_to_dish_creation = await ac.post(
             f"/api/v1/menus/{TestScenario.menu_id}/submenus/{TestScenario.submenu_id}/dishes",
-            json=data
+            json=data_for_dish
         )
 
-        """Testing status code"""
-        assert response.status_code == HTTPStatus.CREATED
-        TestScenario.dish_id = response.json()["id"]
+        assert response_to_dish_creation.status_code == HTTPStatus.CREATED
 
-    async def test_post_second_dish_scenario(
-            self,
-            ac: AsyncClient) -> None:
-        """Testing dish post endpoint"""
-        data = {
+        data_for_second_dish = {
             "title": "My dish 2",
             "description": "My dish description 2",
-            "price": "66.60"
+            "price": "33.33"
         }
-        response = await ac.post(
+        response_to_second_dish_creation = await ac.post(
             f"/api/v1/menus/{TestScenario.menu_id}/submenus/{TestScenario.submenu_id}/dishes",
-            json=data
+            json=data_for_second_dish
         )
 
-        """Testing status code"""
-        assert response.status_code == HTTPStatus.CREATED
-        TestScenario.second_dish_id = response.json()["id"]
+        assert response_to_second_dish_creation.status_code == HTTPStatus.CREATED
 
-    async def test_not_empty_submenu_list_scenario(
-            self,
-            ac: AsyncClient) -> None:
-        """Testing not empty dishes list endpoint"""
-        response = await ac.get(
-            f"/api/v1/menus/{TestScenario.menu_id}/submenus/{TestScenario.submenu_id}/dishes"
-        )
-
-        """Testing status code"""
-        assert response.status_code == HTTPStatus.OK
-
-        """Testing number of menus created code"""
-        assert len(response.json()) == 2
-
-        """Testing all fields values types"""
-        assert type(response.json()[0]["id"]) == str
-        assert type(response.json()[0]["title"]) == str
-        assert type(response.json()[0]["description"]) == str
-        assert type(response.json()[0]["submenu_id"]) == str
-        assert type(response.json()[0]["price"]) == str
-
-    async def test_post_dish_wit_same_parameters_scenario(
-            self,
-            ac: AsyncClient) -> None:
-        """Testing dish post endpoint with duplicate of menu"""
-        data = {
-            "title": "My dish 1",
-            "description": "My dish description 1",
-            "price": "13.40"
+        data_for_second_submenu = {
+            "title": "My submenu 2",
+            "description": "My submenu description 2"
         }
-        response = await ac.post(
-            f"/api/v1/menus/{TestScenario.menu_id}/submenus/{TestScenario.submenu_id}/dishes",
-            json=data
+        response_for_second_submenu_creation = await ac.post(
+            f"/api/v1/menus/{TestScenario.menu_id}/submenus",
+            json=data_for_second_submenu
         )
 
-        """Testing status code"""
-        assert response.status_code == HTTPStatus.CONFLICT
+        assert response_for_second_submenu_creation.status_code == HTTPStatus.CREATED
 
-    async def test_number_of_dishes_in_dishes_list_after_duplicate_post_scenario(
-            self,
-            ac: AsyncClient) -> None:
-        """Testing number of dishes in dishes list after duplicate post"""
-        response = await ac.get(
-            f"/api/v1/menus/{TestScenario.menu_id}/submenus/{TestScenario.submenu_id}/dishes"
-        )
-
-        """Testing status code"""
-        assert response.status_code == HTTPStatus.OK
-
-        """Testing number of menus created"""
-        assert len(response.json()) == 2
-
-    async def test_patch_dishes(
-            self,
-            ac: AsyncClient) -> None:
-        """Testing dishes patch endpoint"""
-        data = {
-            "title": "My updated dish 1",
-            "description": "My updated dish description 1",
-            "price": "10.22"
-        }
-        response = await ac.patch(
-            f"/api/v1/menus/{TestScenario.menu_id}/submenus/{TestScenario.submenu_id}/dishes/{TestScenario.dish_id}",
-            json=data
-        )
-
-        """Testing status code"""
-        assert response.status_code == HTTPStatus.OK
-
-    async def test_specific_patched_dish_scenario(
-            self,
-            ac: AsyncClient) -> None:
-        """Testing patched dish"""
-        response = await ac.get(
-            f"/api/v1/menus/{TestScenario.menu_id}/submenus/{TestScenario.submenu_id}/dishes/{TestScenario.dish_id}")
-
-        """Testing status code"""
-        assert response.status_code == HTTPStatus.OK
-
-        """Testing status code"""
-        assert response.status_code == HTTPStatus.OK
-
-        """Testing all fields presence"""
-        assert "title" in response.json()
-        assert "id" in response.json()
-        assert "description" in response.json()
-        assert "submenu_id" in response.json()
-        assert "price" in response.json()
-
-        """Testing all fields values"""
-        assert response.json()["id"] == TestScenario.dish_id
-        assert response.json()["title"] == "My updated dish 1"
-        assert response.json()["description"] == "My updated dish description 1"
-        assert response.json()["submenu_id"] == TestScenario.submenu_id
-        assert response.json()["price"] == "10.22"
-
-        """Testing all fields values types"""
-        assert type(response.json()["id"]) == str
-        assert type(response.json()["title"]) == str
-        assert type(response.json()["description"]) == str
-        assert type(response.json()["submenu_id"]) == str
-        assert type(response.json()["price"]) == str
-
-    async def test_number_of_submenus_and_dishes_in_specific_menu_scenario(
-            self,
-            ac: AsyncClient) -> None:
         """Testing number of submenus and dishes_in specific menu"""
-        response = await ac.get(
+        response_to_dish_and_submenu_quantity_check = await ac.get(
             f"/api/v1/menus/{TestScenario.menu_id}"
         )
 
         """Testing status code"""
-        assert response.status_code == HTTPStatus.OK
-        print(response.json())
+        assert response_to_dish_and_submenu_quantity_check.status_code == HTTPStatus.OK
+        print(response_to_dish_and_submenu_quantity_check.json())
+
+        """Testing number of submenus and dishes fields"""
+        assert "submenus_count" in response_to_dish_and_submenu_quantity_check.json()
+        assert "dishes_count" in response_to_dish_and_submenu_quantity_check.json()
 
         """Testing number of submenus and dishes"""
-        assert response.json()['submenus_count'] == 1
-        assert response.json()['dishes_count'] == 2
+        assert response_to_dish_and_submenu_quantity_check.json()['submenus_count'] == 2
+        assert response_to_dish_and_submenu_quantity_check.json()['dishes_count'] == 2
 
-    async def test_post_non_validated_data_in_dish_scenario(
-            self,
-            ac: AsyncClient) -> None:
-        """Testing dish post endpoint with non validated data"""
-        data = {
-            "name": "My menu 1",
-            "description": 1
-        }
-        response = await ac.post(
-            f"/api/v1/menus/{TestScenario.menu_id}/submenus/{TestScenario.submenu_id}/dishes",
-            json=data
-        )
-
-        """Testing status code"""
-        assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
-
-    async def test_patch_not_existing_dish_scenario(
-            self,
-            ac: AsyncClient) -> None:
-        """Testing non existing dish patch"""
-        data = {
-            "title": "My once again updated menu 1",
-            "description": "My once again updated menu description 1",
-            "price": "9.45"
-        }
-        response = await ac.patch(
-            f"/api/v1/menus/{TestScenario.menu_id}/submenus/{TestScenario.submenu_id}/dishes/not_existing_dish",
-            json=data
-        )
-
-        """Testing status code"""
-        assert response.status_code == HTTPStatus.NOT_FOUND
-
-    async def test_delete_not_existing_dish_scenario(
-            self,
-            ac: AsyncClient) -> None:
-        """Testing non existing dish delete"""
-
-        response = await ac.delete(
-            f"/api/v1/menus/{TestScenario.menu_id}/submenus/{TestScenario.submenu_id}/dishes/not_existing_dish"
-        )
-
-        """Testing status code"""
-        assert response.status_code == HTTPStatus.NOT_FOUND
-
-    async def test_delete_existing_dish_scenario(self, ac: AsyncClient) -> None:
-        """Testing existing dish delete"""
-
-        response = await ac.delete(
-            f"/api/v1/menus/{TestScenario.menu_id}/submenus/{TestScenario.submenu_id}/dishes/{TestScenario.dish_id}"
-        )
-
-        """Testing status code"""
-        assert response.status_code == HTTPStatus.OK
-
-    async def test_delete_existing_second_dish_scenario(self, ac: AsyncClient) -> None:
-        """Testing existing dish delete"""
-
-        response = await ac.delete(
-            f"/api/v1/menus/{TestScenario.menu_id}/submenus/{TestScenario.submenu_id}/dishes/"
-            f"{TestScenario.second_dish_id}"
-        )
-
-        """Testing status code"""
-        assert response.status_code == HTTPStatus.OK
-
-    async def test_delete_existing_submenu_scenario(
-            self,
-            ac: AsyncClient) -> None:
-        """Testing existing submenu delete"""
-
-        response = await ac.delete(
-            f"/api/v1/menus/{TestScenario.menu_id}/submenus/{TestScenario.submenu_id}"
-        )
-
-        """Testing status code"""
-        assert response.status_code == HTTPStatus.OK
-
-    async def test_delete_existing_menu_scenario(
-            self,
-            ac: AsyncClient) -> None:
-        """Testing existing menu delete"""
-
-        response = await ac.delete(
+        response_to_delete_infrastructure = ac.delete(
             f"/api/v1/menus/{TestScenario.menu_id}"
         )
 
-        """Testing status code"""
-        assert response.status_code == HTTPStatus.OK
+        assert response_to_delete_infrastructure.status_code == HTTPStatus.OK

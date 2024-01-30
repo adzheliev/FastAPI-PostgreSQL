@@ -163,7 +163,7 @@ class TestDishes:
         """Testing status code"""
         assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
 
-    @pytest.mark.usefixtures('create_menu_submenu_and_dish_fixture')
+    @pytest.mark.usefixtures('create_menu_submenu_and_dish_fixture', "delete_menu_submenu_and_dish_fixture")
     async def test_delete_dish(self, ac: AsyncClient) -> None:
         """Testing dish delete endpoint"""
 
