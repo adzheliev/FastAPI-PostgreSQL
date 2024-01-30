@@ -42,8 +42,8 @@ async def get_menu(
     """Function gets a specific menu"""
 
     if target_menu_id is not None:
-        menu = db.query(Menu.id, Menu.title, Menu.description, func.count(Submenu.id).label('submenus_count'),
-                        func.count(Dish.id).label('dishes_count')). \
+        menu = db.query(Menu.id, Menu.title, Menu.description, func.count(Menu.submenus_count).label('submenus_count'),
+                        func.count(Submenu.dishes_count).label('dishes_count')). \
             outerjoin(Submenu, Submenu.menu_id == Menu.id). \
             outerjoin(Dish, Dish.submenu_id == Submenu.id). \
             filter(Menu.id == target_menu_id). \
