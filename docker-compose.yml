@@ -5,19 +5,28 @@ services:
   database:
     image: postgres:15.1-alpine
     restart: always
+    container_name: database
+    expose:
+      - "5432"
     ports:
       - "5432:5432"
     env_file:
       - .env
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready", "-U", "${POSTGRES_USER}", "-d", "${POSTGRES_DB}" ]
+      interval: 10s
+      timeout: 30s
+      retries: 3
 
   app:
     build:
       context: .
       dockerfile: Dockerfile
     restart: always
-    depends_on:
-      - database
     ports:
       - "8000:8000"
     env_file:
       - .env
+    depends_on:
+      database:
+        condition: service_healthy
