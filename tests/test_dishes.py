@@ -56,12 +56,6 @@ class TestDishes:
         """Testing dish delete endpoint"""
         yield
         await ac.delete(
-            f"/api/v1/menus/{TestDishes.menu_id}/submenus/{TestDishes.submenu_id}/dishes/{TestDishes.dish_id}"
-        )
-        await ac.delete(
-            f"/api/v1/menus/{TestDishes.menu_id}/submenus/{TestDishes.submenu_id}"
-        )
-        await ac.delete(
             f"/api/v1/menus/{TestDishes.menu_id}"
         )
 
