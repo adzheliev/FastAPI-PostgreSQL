@@ -26,3 +26,4 @@ class Menu(Base):
     )
     submenus_count = Column(Integer, default=0)
     dishes_count = Column(Integer, default=0)
+
