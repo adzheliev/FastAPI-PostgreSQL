@@ -42,15 +42,29 @@ async def get_menu(
     """Function gets a specific menu"""
 
     if target_menu_id is not None:
-        menu = db.query(Menu.id, Menu.title, Menu.description, func.count(Submenu.id).label('submenus_count'),
-                        func.count(Dish.id).label('dishes_count')). \
-            outerjoin(Submenu, Submenu.menu_id == Menu.id). \
-            outerjoin(Dish, Dish.submenu_id == Submenu.id). \
-            filter(Menu.id == target_menu_id). \
-            group_by(Menu.id). \
-            first()
-        return menu
-    raise HTTPException(status_code=404, detail="menu not found")
+        query = ((((db.query(
+            Menu.id,
+            Menu.title,
+            Menu.description,
+            func.count(Submenu.id.distinct()).label('submenus_count'),
+            func.count(Dish.id.distinct()).label('dishes_count'))
+                    .join(Submenu, Submenu.menu_id == Menu.id, isouter=True))
+                   .join(Dish, Dish.submenu_id == Submenu.id, isouter=True))
+                  .filter(Menu.id == target_menu_id))
+                 .group_by(Menu.id))
+
+        result = query.one_or_none()
+        if result:
+            id, title, description, submenus_count, dishes_count = result
+            return {
+                "id": id,
+                "title": title,
+                "description": description,
+                "submenus_count": submenus_count,
+                "dishes_count": dishes_count
+            }
+        else:
+            raise HTTPException(status_code=404, detail="menu not found")
 
 
 @router.post(
