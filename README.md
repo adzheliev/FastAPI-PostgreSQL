@@ -30,24 +30,4 @@ Once you finished testing the application use following command on yor terminal 
 docker compose -f docker-compose.yml down    
 ```
 
-Query to get dishes count and submenus count of the certain menu is realized in
-```bash
-/routes/menu.py
-```
-
-The query is following:
-```bash
-
-query = ((((db.query(
-            Menu.id,
-            Menu.title,
-            Menu.description,
-            func.count(Submenu.id.distinct()).label('submenus_count'),
-            func.count(Dish.id.distinct()).label('dishes_count'))
-                    .join(Submenu, Submenu.menu_id == Menu.id, isouter=True))
-                   .join(Dish, Dish.submenu_id == Submenu.id, isouter=True))
-                  .filter(Menu.id == target_menu_id))
-                 .group_by(Menu.id))
-```
-
 </span>
