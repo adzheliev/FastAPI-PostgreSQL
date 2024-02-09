@@ -1,7 +1,5 @@
 <span style="font-family: Tahoma;"> 
 
-## Y_lab
-
 ### To run locally
 
 Open your IDE of choice and clone this repository
